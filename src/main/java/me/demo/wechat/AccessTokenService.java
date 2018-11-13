@@ -1,5 +1,7 @@
 package me.demo.wechat;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import me.demo.wechat.common.AccessTokenAccessor;
 import me.demo.wechat.entry.AccessToken;
 import me.demo.wechat.util.NetWorkHelper;
@@ -14,23 +16,23 @@ import javax.servlet.http.HttpServlet;
     * Created by xdp on   /1/ .
     */
   @WebServlet(
-                  name = "AccessTokenServlet",
-                  urlPatterns = {"/AccessTokenServlet"},
+                  name = "AccessTokenService",
+                  urlPatterns = {"/AccessTokenService"},
                   loadOnStartup = 1,
                   initParams = {
-                          @WebInitParam(name = "appId", value = "wxbe4d 3e 7e8bb1"),
-                          @WebInitParam(name = "appSecret", value = "ccbc d      b3d a6f2ebda")
+                          @WebInitParam(name = "appId", value = "wx33895b4b9d85841a"),
+                          @WebInitParam(name = "appSecret", value = "da77409f548c8b25ef1693d87ab4f517")
                   })
-  public class AccessTokenServlet extends HttpServlet {
+  public class AccessTokenService extends HttpServlet {
  
               @Override
       public void init() throws ServletException {
-                  System.out.println("启动WebServlet");
+                  System.out.println(" starting WebServlet");
                   super.init();
-         
+
                   final String appId = getInitParameter("appId");
                   final String appSecret = getInitParameter("appSecret");
-         
+
                   //开启一个新的线程
                   new Thread(new Runnable() {
               @Override
@@ -54,11 +56,11 @@ import javax.servlet.http.HttpServlet;
                                                   try {
                                                           Thread.sleep( 1000  * 10 ); //发生异常休眠1秒
                                                       } catch (Exception e1) {
-                             
+
                                                       }
                                               }
                                       }
-                 
+
                               }
           }).start();
               }
@@ -76,7 +78,7 @@ import javax.servlet.http.HttpServlet;
                   String Url = String.format("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s", appId, appSecret);
                   //此请求为https的get请求，返回的数据格式为{"access_token":"ACCESS_TOKEN","expires_in":  }
                   String result = netHelper.getHttpsResponse(Url, "");
-                  System.out.println("获取到的access_token="+result);
+                  System.out.println("retrieved access_token="+result);
                   //使用FastJson将Json字符串解析成Json对象
                   JSONObject json = JSON.parseObject(result);
                   AccessToken token = new AccessToken();

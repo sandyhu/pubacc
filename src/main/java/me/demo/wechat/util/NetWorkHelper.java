@@ -4,9 +4,12 @@ import javax.net.ssl.*;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Map;
 
 /**
  * 访问网络用到的工具类
@@ -85,5 +88,26 @@ public class NetWorkHelper {
         }
         return resultData;
     }
+
+    public String getHttpsResponse(String reqUrl, String requestMethod, Map<String, String> params) throws UnsupportedEncodingException {
+        String parameters = "";
+        boolean hasParams = false;
+        for(String key : params.keySet()){
+            String value = URLEncoder.encode(params.get(key), "UTF-8");
+            parameters += key +"="+ value +"&";
+            hasParams = true;
+        }
+        if(hasParams){
+            parameters = parameters.substring(0, parameters.length()-1);
+        }
+
+
+        reqUrl += "?"+ parameters;
+
+        String result=getHttpsResponse(reqUrl,requestMethod);
+        return result;
+    }
+
+
 
 }
